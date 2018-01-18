@@ -18,7 +18,7 @@ function slack($message, $channel)
 {
     $ch = curl_init("https://slack.com/api/chat.postMessage");
     $data = http_build_query([
-        "token" => "",
+        "token" => "xoxp-7476839955-7545559285-301910864870-553c1d2e4f53751246deec4881225434",
         "channel" => $channel, //"#mychannel",
         "text" => $message, //"Hello, Foo-Bar channel message.",
         "username" => "rcg_spy_scrapper",
@@ -42,11 +42,12 @@ $RCG = new RCGroupsForumSpyScrapper();
 /**
  * define the keywords we wish to filter on.
  */
-$RCG->keywords = ['x9d', 'qx7', 'Taranis', 'astrox', 'alien'. 'goggles', 'kiss', 'plane', 'car', 'betaflight', 'motors'];
+//$RCG->keywords = ['x9d', 'qx7', 'Taranis', 'astrox'];
 
 $RCG->forums = [
     'Aircraft - Electric - Multirotor (FS/W)',
-    'Aircraft - General - Radio Equipment (FS/W)'
+    'Aircraft - General - Radio Equipment (FS/W)',
+    'FPV Equipment (FS/W)'
 ];
 
 /**
@@ -60,7 +61,7 @@ $results = $RCG->scrap();
 if(!empty($results)) {
     $rcgurl = 'https://www.rcgroups.com/forums/showthread.php?';
     $message = "Found post within the following Threads '" . implode("', '", $RCG->forums) . "' \n";
-    $message = "with the following Keywords '" . implode("', '", $RCG->keywords) . "' \n\n";
+    $message .= "with the following Keywords '" . implode("', '", $RCG->keywords) . "' \n\n";
 
 
     /**
