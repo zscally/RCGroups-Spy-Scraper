@@ -171,20 +171,15 @@ class RCGroupsForumSpyScrapper
     {
         foreach($this->keywords as $keyword)
         {
-            $found = 0;
             $input = preg_quote($keyword, '~');
             $result = preg_grep('~' . $input . '~', get_object_vars($post));
 
             if( !empty( $result ) )
             {
-                $found = 1;
-            }
-
-            if($found > 0)
-            {
                 return true;
             }
         }
+        return false;
     }
 
     /**
