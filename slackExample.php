@@ -42,11 +42,12 @@ $RCG = new RCGroupsForumSpyScrapper();
 /**
  * define the keywords we wish to filter on.
  */
-$RCG->keywords = ['x9d', 'qx7', 'Taranis', 'astrox', 'alien'. 'goggles', 'kiss', 'plane', 'car', 'betaflight', 'motors'];
+//$RCG->keywords = ['x9d', 'qx7', 'Taranis', 'astrox'];
 
 $RCG->forums = [
     'Aircraft - Electric - Multirotor (FS/W)',
-    'Aircraft - General - Radio Equipment (FS/W)'
+    'Aircraft - General - Radio Equipment (FS/W)',
+    'FPV Equipment (FS/W)'
 ];
 
 /**
@@ -60,7 +61,7 @@ $results = $RCG->scrap();
 if(!empty($results)) {
     $rcgurl = 'https://www.rcgroups.com/forums/showthread.php?';
     $message = "Found post within the following Threads '" . implode("', '", $RCG->forums) . "' \n";
-    $message = "with the following Keywords '" . implode("', '", $RCG->keywords) . "' \n\n";
+    $message .= "with the following Keywords '" . implode("', '", $RCG->keywords) . "' \n\n";
 
 
     /**
