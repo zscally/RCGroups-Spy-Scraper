@@ -1,7 +1,7 @@
 <?php
 
 
-require_once('RCGroupsForumSpyScrapper.php');
+require_once('RCGroupsForumSpyScraper.php');
 
 
 /**
@@ -21,7 +21,7 @@ function slack($message, $channel)
         "token" => "",
         "channel" => $channel, //"#mychannel",
         "text" => $message, //"Hello, Foo-Bar channel message.",
-        "username" => "rcg_spy_scrapper",
+        "username" => "rcg_spy_scraper",
     ]);
     curl_setopt($ch, CURLOPT_CUSTOMREQUEST, 'POST');
     curl_setopt($ch, CURLOPT_POSTFIELDS, $data);
@@ -36,7 +36,7 @@ function slack($message, $channel)
 /**
  * set up the new object
  */
-$RCG = new RCGroupsForumSpyScrapper();
+$RCG = new RCGroupsForumSpyScraper();
 
 
 /**
@@ -90,5 +90,8 @@ if(!empty($results)) {
         $message .= "----------------------------------------------------------\n\n";
     }
 
-    slack(print_r($message, true), 'rcgroup-spyscrapper');
+    $slack = slack(print_r($message, true), 'rcgroup-spyscraper');
 }
+
+
+print_r($results);

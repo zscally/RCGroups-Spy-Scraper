@@ -1,14 +1,34 @@
 <?php
 /*****
- * RCGroups Fourm scrapper for keywords. this script will look at the form
+ * RCGroups Fourm scraper for keywords. this script will look at the form
  * spy and watch for keywords in the title, preview context and or by user
  * @date 01/07/2018
  * @author Zachary Scally
  * @github https://github.com/zscally
  */
 
-class RCGroupsForumSpyScrapper
+class RCGroupsForumSpyScraper
 {
+    /**
+     * pid file that gets created to store last known ID
+     *
+     * @var __DIR__
+     */
+    public $pidFileLocation = __DIR__;
+
+    /**
+     * pid file name
+     *
+     * @var null
+     */
+    public $pidfile = 'pid.json';
+
+
+    /**
+     * @var pid
+     */
+    public $pid = null;
+
     /**
      * URL to the main RCG forum spy page this is needed so we can grab the max post ID from the Javascript
      * @var string
@@ -59,6 +79,38 @@ class RCGroupsForumSpyScrapper
     public $lookInWhat = [];
 
     /**
+     * Set Pid file
+     */
+    private function setPidFile($pidID = null)
+    {
+        $pidFile = $this->pidFileLocation . DIRECTORY_SEPARATOR . $this->pidfile;
+        $lastPostID = !is_null($pidID) ? $pidID : $this->lastPostId;
+
+        try {
+            $createFile = file_put_contents($pidFile, '{"pid":"' . $lastPostID . '"}');
+            if( ! $createFile ) {
+                throw new Exception('Unable to create file ');
+            }
+        } catch( Exception $e) {
+            echo $e->getMessage();
+            return false;
+        }
+        $data = json_decode(file_get_contents($pidFile), true);
+        return $data['pid'];
+    }
+    
+    
+    private function getPid() 
+    {
+        if( is_null( $this->pid ) )
+        {
+            $this->setPidFile();
+        }
+        return $this->pid;
+    }
+
+
+    /**
      * this method sets the last post id
      *
      * @param $lastPostId
@@ -75,9 +127,11 @@ class RCGroupsForumSpyScrapper
      */
     public function getLastPostId()
     {
-        if( is_null($this->lastPostId) )
+        if( is_null($this->lastPostId) && is_null($this->getPid()) )
         {
             $this->setLastPostId($this->getAndSetFirstPostId());
+        } else {
+            $this->lastPostId = $this->getPid();
         }
         return $this->lastPostId;
     }
@@ -89,6 +143,7 @@ class RCGroupsForumSpyScrapper
      */
     private function getAndSetFirstPostId()
     {
+
         $html = file_get_contents($this->RCGForumSpyURL);
         preg_match('#var highestid = (.*?);\s*$#m', $html, $matches);
         return $matches[1];
@@ -191,11 +246,14 @@ class RCGroupsForumSpyScrapper
     public function scrap()
     {
         $results = [];
+        $rollingPostIDs = [];
         $data = $this->getData();
         if( ! empty( $data ) )
         {
             foreach( $data as $post )
             {
+                $rollingPostIDs[] = $post->postid;
+
                 //check if the post is in the threads we care about
                 if( ! empty($this->lookInWhat) && ! $this->lookInWhat($post->what) )
                 {
@@ -216,10 +274,15 @@ class RCGroupsForumSpyScrapper
                 {
                     continue;
                 }
+
+
                 $results[] = $post;
             }
-
-            return $results;
+            $maxId = max($rollingPostIDs);
+            $this->setPidFile( $maxId);
+            if( $maxId > $this->pid) {
+                return $results;
+            }
         }
     }
 }

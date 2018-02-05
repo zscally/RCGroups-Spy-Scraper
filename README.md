@@ -1,6 +1,6 @@
-# RCGroups Forum Spy Scrapper
+# RCGroups Forum Spy Scraper
 
-Simple scrapper that can be configured to scrap RCGroups forums.
+Simple scraper that can be configured to scrap RCGroups forums.
 
 For the most part, This thing looks like it could be ran ever 1 second. If I was to automate the scan 
 I would set up a crontab to run this script every 3 seconds, unfortunately crons are limited to every 1min and I feel
@@ -14,9 +14,9 @@ set_time_limit(0);
 Now for those that would rather have a more hands off approach you could setup a deamon, however I will not cover that 
 in this repo. I will provide a bash script that will run the script in a infinate loop and sleep for 3 seconds.
 
-below you would put this in a file called scrapper.sh chmod it to 0777 and execute it like so
+below you would put this in a file called scraper.sh chmod it to 0777 and execute it like so
 
-`./scrapper.sh &` 
+`./scraper.sh &` 
 
 this will put the script in the background.
 
@@ -42,12 +42,12 @@ set_time_limit(0);
 /**
  * require our class 
  */
-require_once('RCGroupsForumSpyScrapper.php');
+require_once('RCGroupsForumSpyScraper.php');
 
 /**
  * set up the new object
  */
-$RCG = new RCGroupsForumSpyScrapper();
+$RCG = new RCGroupsForumSpyScraper();
 
 /**
  * Scrap the results
@@ -68,12 +68,12 @@ set_time_limit(0);
 /**
  * require our class 
  */
-require_once('RCGroupsForumSpyScrapper.php');
+require_once('RCGroupsForumSpyScraper.php');
 
 /**
  * set up the new object
  */
-$RCG = new RCGroupsForumSpyScrapper();
+$RCG = new RCGroupsForumSpyScraper();
 
 /**
  * Define the fourms we wish to look in
@@ -102,7 +102,7 @@ print_r($results);
 
 ### Slack Integration Example:
 
-Now that we have the scrapper taken care of the way you wish to receive alerts is totally up to you. in the examples
+Now that we have the scraper taken care of the way you wish to receive alerts is totally up to you. in the examples
 below I will show you how I use slack to send out a message with a link to the post if one is found.
 
 
@@ -110,7 +110,7 @@ below I will show you how I use slack to send out a message with a link to the p
 <?php
 
 
-require_once('RCGroupsForumSpyScrapper.php');
+require_once('RCGroupsForumSpyScraper.php');
 
 
 /**
@@ -130,7 +130,7 @@ function slack($message, $channel)
         "token" => "",
         "channel" => $channel, //"#mychannel",
         "text" => $message, //"Hello, Foo-Bar channel message.",
-        "username" => "rcg_spy_scrapper",
+        "username" => "rcg_spy_scraper",
     ]);
     curl_setopt($ch, CURLOPT_CUSTOMREQUEST, 'POST');
     curl_setopt($ch, CURLOPT_POSTFIELDS, $data);
@@ -145,7 +145,7 @@ function slack($message, $channel)
 /**
  * set up the new object
  */
-$RCG = new RCGroupsForumSpyScrapper();
+$RCG = new RCGroupsForumSpyScraper();
 
 
 /**
@@ -198,7 +198,7 @@ if(!empty($results)) {
         $message .= "----------------------------------------------------------\n\n";
     }
 
-    slack(print_r($message, true), 'rcgroup-spyscrapper');
+    slack(print_r($message, true), 'rcgroup-spyscraper');
 }
 
 ```

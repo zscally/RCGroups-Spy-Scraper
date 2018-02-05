@@ -2,12 +2,12 @@
 /**
  * require our class
  */
-require_once('RCGroupsForumSpyScrapper.php');
+require_once('RCGroupsForumSpyScraper.php');
 
 /**
  * set up the new object
  */
-$RCG = new RCGroupsForumSpyScrapper();
+$RCG = new RCGroupsForumSpyScraper();
 
 /**
  * Define the fourms we wish to look in
